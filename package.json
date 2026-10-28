@@ -1,0 +1,20 @@
+{
+  "name": "campusfind",
+  "version": "1.0.0",
+  "description": "CampusFind — Campus Lost & Found Portal (MERN Stack)",
+  "private": true,
+  "scripts": {
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "test:backend": "npm --prefix backend test",
+    "build:frontend": "npm --prefix frontend run build",
+    "lint:frontend": "npm --prefix frontend run lint"
+  },
+  "keywords": [
+    "campusfind",
+    "lost-and-found",
+    "mern"
+  ],
+  "author": "CampusFind Team",
+  "license": "ISC"
+}

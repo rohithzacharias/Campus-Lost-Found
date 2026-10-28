@@ -1,0 +1,23 @@
+const cloudinary = require('cloudinary').v2;
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+
+function configureCloudinary() {
+  const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
+  if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET) {
+    console.warn('Warning: Cloudinary credentials not fully configured in environment.');
+  } else {
+    console.log('Cloudinary configured successfully for cloud:', CLOUDINARY_CLOUD_NAME);
+  }
+
+  cloudinary.config({
+    cloud_name: CLOUDINARY_CLOUD_NAME,
+    api_key: CLOUDINARY_API_KEY,
+    api_secret: CLOUDINARY_API_SECRET,
+    secure: true
+  });
+
+  return cloudinary;
+}
+
+module.exports = { cloudinary, configureCloudinary };
