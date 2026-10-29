@@ -26,6 +26,7 @@ export default function FoundItemDetailPage() {
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [imgError, setImgError] = useState(false);
 
   // Status transition state
   const [updatingStatus, setUpdatingStatus] = useState(false);
@@ -198,10 +199,11 @@ export default function FoundItemDetailPage() {
           {/* Left Column: Image & Finder Contact */}
           <div className="lg:col-span-5 space-y-4">
             <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-slate-100 border border-slate-200/80 shadow-inner">
-              {item.imageUrl ? (
+              {item.imageUrl && !imgError ? (
                 <img
                   src={item.imageUrl}
                   alt={item.itemName}
+                  onError={() => setImgError(true)}
                   className="w-full h-full object-cover object-center"
                 />
               ) : (

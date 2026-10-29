@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StatusBadge from './StatusBadge';
 
 export default function ItemCard({ item, type = 'lost' }) {
   const navigate = useNavigate();
+  const [imgError, setImgError] = useState(false);
   const isLost = type === 'lost';
   const detailUrl = isLost ? `/lost-items/${item._id}` : `/found-items/${item._id}`;
   const location = isLost ? item.lastSeenLocation : item.foundLocation;
@@ -33,10 +34,11 @@ export default function ItemCard({ item, type = 'lost' }) {
     >
       {/* Image container */}
       <div className="relative aspect-16/10 w-full bg-slate-100 overflow-hidden">
-        {item.imageUrl ? (
+        {item.imageUrl && !imgError ? (
           <img
             src={item.imageUrl}
             alt={item.itemName}
+            onError={() => setImgError(true)}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
           />

@@ -59,6 +59,9 @@ async function uploadImageCloudinary(fileSource, folder = 'campusfind', req = nu
     return cloudinaryResult;
   } catch (cloudinaryError) {
     console.warn(`[ImageUpload] Cloudinary upload returned (${cloudinaryError.message}). Falling back to local upload storage.`);
+    if (cloudinaryError.http_code === 403 || (cloudinaryError.message && cloudinaryError.message.includes('403'))) {
+      console.warn(`[ImageUpload] CLOUDINARY 403 ADVICE: Cloudinary rejected the upload because API Key "${process.env.CLOUDINARY_API_KEY}" lacks 'create/upload' permissions. Use the Master API Key from Cloudinary Dashboard or grant 'Create' permissions to this key in Cloudinary Settings > API Keys.`);
+    }
 
     // If buffer or file, save to local uploads/ directory as resilient fallback
     if (Buffer.isBuffer(fileSource)) {
@@ -80,7 +83,10 @@ async function uploadImageCloudinary(fileSource, folder = 'campusfind', req = nu
       fs.writeFileSync(filePath, fileSource);
 
       const host = req ? req.get('host') : `localhost:${process.env.PORT || 5000}`;
-      const protocol = req ? req.protocol : 'http';
+      let protocol = req ? (req.headers['x-forwarded-proto'] || req.protocol) : 'https';
+      if (host.includes('render.com') || host.includes('vercel.app')) {
+        protocol = 'https';
+      }
       const secure_url = `${protocol}://${host}/uploads/${filename}`;
 
       return {
